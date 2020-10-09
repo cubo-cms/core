@@ -1,0 +1,24 @@
+{
+  "name": "@cubo-cms/core",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./index.cjs",
+  "exports": {
+    "import": "./index.mjs",
+    "require": "./index.cjs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cubo-cms/core.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cubo-cms/core/issues"
+  },
+  "homepage": "https://github.com/cubo-cms/core#readme"
+}
