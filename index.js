@@ -1,3 +1,11 @@
+/** @package        @cubo-cms/core
+  * @version        0.0.1
+  * @copyright      2020 Cubo CMS <https://cubo-cms.com/COPYRIGHT.md>
+  * @license        MIT license <https://cubo-cms.com/LICENSE.md>
+  * @author         Papiando <info@papiando.com>
+  * @module         Namespace
+  * @description    Static core class - Enables registering and loading modules
+  **/
 'use strict'
 
 import fs from 'fs';
@@ -5,9 +13,9 @@ import path from 'path';
 
 /** @module {class} Namespace
   *
-  * Static core class - Enables registering and loading modules.
-  *   NOTE: Modules first need to be registered to load.
-  *   NOTE: This class creates global properties as detailed below.
+  * Static core class - Enables registering and loading modules
+  *   NOTE: Modules first need to be registered to load
+  *   NOTE: This class creates global properties as detailed below
   *
   * @property {array} global.namespace - holds all loaded modules
   * @property {array} global.registry - holds all registered modules

@@ -3,11 +3,8 @@
   "type": "module",
   "version": "0.0.1",
   "description": "",
-  "main": "./index.cjs",
-  "exports": {
-    "import": "./index.mjs",
-    "require": "./index.cjs"
-  },
+  "main": "./index.js",
+  "exports": "./index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,8 +12,11 @@
     "type": "git",
     "url": "git+https://github.com/cubo-cms/core.git"
   },
-  "author": "",
-  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "author": "Papiando <info@papiando.com>",
+  "license": "MIT license <https://cubo-cms.com/LICENSE.md>",
   "bugs": {
     "url": "https://github.com/cubo-cms/core/issues"
   },
