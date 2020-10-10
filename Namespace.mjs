@@ -1,5 +1,5 @@
 /** @package        @cubo-cms/core
-  * @version        0.0.2
+  * @version        0.0.3
   * @copyright      2020 Cubo CMS <https://cubo-cms.com/COPYRIGHT.md>
   * @license        MIT license <https://cubo-cms.com/LICENSE.md>
   * @author         Papiando <info@papiando.com>
@@ -18,7 +18,10 @@ import fs from 'fs';
 import path from 'path';
 import url from 'url';
 
-/** @module {class} Namespace
+import Log from './module/Log.mjs';
+import FrameworkError from './module/FrameworkError.mjs';
+
+/** @module Namespace
   *
   * Static namespace class - Enables registering and loading modules
   * into a common namespace
@@ -35,10 +38,18 @@ export default class Namespace {
   /** @property {object} default - holds default values
     **/
   static default = {
-    corePath: path.dirname(url.fileURLToPath(import.meta.url)),
-    extension: '.mjs',
+    publishGlobally: true,
     modulePath: 'module'
   };
+  /** Static @function corePath()
+    *
+    * Static getter function corePath - returns the path to this module
+    *
+    * @return {string}
+    **/
+  static get corePath() {
+    return path.dirname(url.fileURLToPath(import.meta.url));
+  }
   /** Static @function loaded()
     *
     * Static getter function loaded - returns object of loaded modules
@@ -57,11 +68,13 @@ export default class Namespace {
   static get registered() {
     return Namespace.registry;
   }
-  /** Static asynchronous @function autoLoad()
+  /** Static asynchronous @function autoLoad(registry)
     *
     * Static function autoLoad - Loads all registered modules
     *   NOTE: Uses autoRegister if no modules are registered yet
     *
+    * @param {object} registry - optionally provide alternative registry
+    * @return {object}
     **/
   static async autoLoad(registry = undefined) {
     try {
@@ -72,10 +85,10 @@ export default class Namespace {
       await Promise.allSettled(promises);
       return Namespace.loaded;
     } catch(error) {
-      console.error(error);
+      throw new Exception({ message: `Failed to autoload modules`, type: 'error', error: error });
     }
   }
-  /** Static @function autoRegister(path, dependency)
+  /** Static @function autoRegister(path,dependency)
     *
     * Static function autoRegister - locates all modules in path and registers these
     *   NOTE: Names of subfolders are considered dependencies
@@ -96,7 +109,7 @@ export default class Namespace {
         }
       }
     } catch(error) {
-      console.error(error);
+      throw new Exception({ message: `Failed to autoregister modules`, type: 'error', error: error });
     }
     return Namespace.registered;
   }
@@ -108,7 +121,7 @@ export default class Namespace {
     * @return {bool}
     **/
   static isLoaded(moduleName) {
-    return (typeof Namespace.namespace[moduleName] !== 'undefined');
+    return typeof Namespace.namespace[moduleName] !== 'undefined';
   }
   /** Static @function isRegistered(module)
     *
@@ -130,18 +143,23 @@ export default class Namespace {
   static async load(moduleName) {
     try {
       if(Namespace.isLoaded(moduleName)) {
+        throw new FrameworkError({ message: `Module \"${moduleName}\" was already loaded`, type: 'error' });
         return Namespace.namespace[moduleName];
-      } else {
+      } else if(Namespace.isRegistered(moduleName)) {
         let module;
         let registration = Namespace.registry[moduleName];
         if(registration.dependency) {
           await Namespace.load(registration.dependency);
         }
-        module = await import('./' + path.relative(Namespace.default.corePath, registration.path));
-        return global[moduleName] = Namespace.namespace[moduleName] = Namespace[moduleName] = module.default;
+        module = await import('./' + path.relative(Namespace.corePath, registration.path));
+        Namespace.namespace[moduleName] = Namespace[moduleName] = module.default;
+        if(Namespace.default.publishGlobally) global[moduleName] = Namespace[moduleName];
+        return Namespace[moduleName];
+      } else {
+        throw new FrameworkError({ message: `Module \"${moduleName}\" is not registered`, type: 'warning' });
       }
     } catch(error) {
-      console.error(error);
+      new Log(error);
     }
   }
   /** Static @function register(module)
@@ -158,4 +176,4 @@ export default class Namespace {
   }
 }
 
-let reg = Namespace.autoRegister('module', Namespace.default.corePath);
+let reg = Namespace.autoRegister('module', Namespace.corePath);

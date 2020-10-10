@@ -1,15 +1,15 @@
 {
   "name": "@cubo-cms/core",
   "type": "module",
-  "version": "0.0.2",
-  "description": "",
-  "main": "./index.cjs",
+  "version": "0.0.3",
+  "description": "Core classes and namespace to allow for modular extensibility",
+  "main": "./Namespace.cjs",
   "exports": {
-    "import": "./index.mjs",
-    "require": "./index.cjs"
+    "import": "./Namespace.mjs",
+    "require": "./Namespace.cjs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./example/index.mjs"
   },
   "repository": {
     "type": "git",
@@ -18,8 +18,11 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
+  "engines": {
+    "node": ">=14.8"
+  },
   "author": "Papiando <info@papiando.com>",
-  "license": "MIT license <https://cubo-cms.com/LICENSE.md>",
+  "license": "MIT <LICENSE.md>",
   "bugs": {
     "url": "https://github.com/cubo-cms/core/issues"
   },

@@ -1,5 +1,5 @@
 /** @package        @cubo-cms/core
-  * @version        0.0.2
+  * @version        0.0.3
   * @copyright      2020 Cubo CMS <https://cubo-cms.com/COPYRIGHT.md>
   * @license        MIT license <https://cubo-cms.com/LICENSE.md>
   * @author         Papiando <info@papiando.com>
@@ -13,7 +13,7 @@
 import fs from 'fs';
 import path from 'path';
 
-/** @module {class} Core
+/** @module Core
   *
   * Core class - Almost all classes extend this core class
   *   NOTE: First register all modules
@@ -25,7 +25,7 @@ export default class Core {
   /** Private @property {object} name - remembers class name
     **/
   #name;
-  /** @function constructor()
+  /** @function constructor(data)
     *
     * Class constructor
     *
