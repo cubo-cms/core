@@ -1,14 +1,14 @@
-import Core from '../index.js';
+'use strict'
 
-/*
-Core.register({name:'Entity',path:'module/Entity.mjs'});
-Core.register({name:'Application',path:'module/Application.mjs',dependency:'Entity'});
-Core.register({name:'Controller',path:'module/Controller.mjs',dependency:'Entity'});
-Core.register({name:'ArticleController',path:'module/ArticleController.mjs',dependency:'Controller'});
-console.log(Core.registered);
-*/
+import Namespace from '../index.mjs';
 
-//Core.autoRegister();
-//console.log(Core.registered);
+console.log(Namespace.registered);
 
-Core.autoLoad().then(console.log(Core.loaded));
+async function loadFramework() {
+  await Namespace.autoLoad();
+}
+
+loadFramework()
+  .finally(() => {
+    let a = new Core();
+  });
