@@ -1,7 +1,7 @@
 {
   "name": "@cubo-cms/core",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Core classes and namespace to allow for modular extensibility",
   "main": "./Namespace.cjs",
   "exports": {

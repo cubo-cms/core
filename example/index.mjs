@@ -1,11 +1,12 @@
 'use strict'
 
-import Namespace from '../Namespace.mjs';
+import Namespace from '../index.mjs';
 
 console.log('');
 console.log('Registered modules:');
 console.log('');
 console.log(Namespace.registered);
+console.log('');
 
 await Namespace.autoLoad();
 
@@ -15,6 +16,6 @@ console.log('');
 console.log(Namespace.loaded);
 console.log('');
 
-let a = new Log({ message: 'Message to console', type: 'info' });
+Log.success('Invoking autoloaded module \"Log\"');
 
 process.exit(0);

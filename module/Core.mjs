@@ -1,5 +1,5 @@
 /** @package        @cubo-cms/core
-  * @version        0.0.3
+  * @version        0.0.4
   * @copyright      2020 Cubo CMS <https://cubo-cms.com/COPYRIGHT.md>
   * @license        MIT license <https://cubo-cms.com/LICENSE.md>
   * @author         Papiando <info@papiando.com>
@@ -12,6 +12,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 /** @module Core
   *
@@ -53,6 +54,15 @@ export default class Core {
     **/
   get class() {
     return this.#name;
+  }
+  /** Static @function corePath()
+    *
+    * Static getter function corePath - returns the path to this module
+    *
+    * @return {string}
+    **/
+  static get corePath() {
+    return path.dirname(fileURLToPath(import.meta.url));
   }
   /** @function _id()
     *
@@ -165,29 +175,39 @@ export default class Core {
   /** Static @function load(data,defaultData)
     *
     * Static function load - loads data from a path and returns object
+    * NOTE: change in the future to include other formats such as XML
     *
     * @param {string||object} data - either an object or a path to the object
     * @param {string||object} defaultData - loads default data if data undefined
     * @return {object}
     **/
   static load(data = {}, defaultData = null) {
-    let id;
-    if(id = Core.resolve(data)) {
+    return Core.loadJSON(data, defaultData);
+  }
+  /** Static @function loadJSON(data,defaultData)
+    *
+    * Static function loadJSON - loads data from a path and returns object
+    *
+    * @param {string||object} data - either an object or a path to the object
+    * @param {string||object} defaultData - loads default data if data undefined
+    * @return {object}
+    **/
+  static loadJSON(data = {}, defaultData = null) {
+    let filePath = Core.resolve(data);
+    if(filePath) {
       if(data.includes('//')) {
         // TODO: read from stream
         return null;
       } else {
         try {
-          // TODO: in ES6 scripts need to be imported; extension is .mjs
-          if(fs.existsSync(id) || fs.existsSync(id + '.js') || fs.existsSync(id + '.json')) {
-            // TODO: might no longer work in ES6
-            data = require(id);
+          if(fs.existsSync(filePath) || fs.existsSync(filePath + '.json')) {
+            data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
           } else {
-            // Soft fail - file does not exist
+            Log.error(`File \"${filePath}\" not found`);
             data = null;
           }
         } catch(error) {
-          // Soft fail - could not read
+          Log.error(`File system error`);
           data = null;
         }
       }
@@ -197,48 +217,23 @@ export default class Core {
     }
     return data || defaultData;
   }
-  /** Static @function loadFile(fileName)
-    *
-    * Static function loadFile - loads a file
-    *
-    * @param {string} fileName - an absolute or relative file path and returns object
-    * @return {object} - returns null if file could not be loaded
-    **/
-  static loadFile(fileName = null) {
-    let filePath = Core.resolve(fileName);
-    if(filePath) {
-      if(filePath.includes('//')) {
-        // TODO: read from stream
-        return null;
-      } else {
-        try {
-          return fs.readFileSync(filePath);
-        } catch(error) {
-          // Soft fail - could not read
-          return null;
-        }
-      }
-    } else {
-      // Soft fail
-      return null;
-    }
-  }
-  /** Static @function resolve(thisPath)
+  /** Static @function resolve(filePath)
     *
     * Static function resolve - reconstructs path
     * TODO: might no longer work
     *
-    * @param {string} thisPath - absolute or relative path; '#' resolves to web root
+    * @param {string} filePath - absolute or relative path; '#' resolves to web root
     * @return {string}
     **/
-  static resolve(thisPath = '.') {
-    if(typeof(thisPath) == 'string') {
-      if(thisPath.includes('//')) {
-        return thisPath;
+  static resolve(filePath = '.') {
+    if(typeof(filePath) == 'string') {
+      if(filePath.includes('//')) {
+        return filePath;
       } else {
-        return path.isAbsolute(thisPath) ? thisPath : thisPath.startsWith('#/') ? path.join(__base, thisPath.substr(1)) : path.resolve(__dirname, thisPath);
+        // TODO: __base is no longer used
+        return filePath.startsWith('#/') ? path.join(Core.corePath, '..', filePath.substr(1)) : filePath;
       }
     } else
-      return null;
+      return undefined;
   }
 }

@@ -1,5 +1,5 @@
 /** @package        @cubo-cms/core
-  * @version        0.0.3
+  * @version        0.0.4
   * @copyright      2020 Cubo CMS <https://cubo-cms.com/COPYRIGHT.md>
   * @license        MIT license <https://cubo-cms.com/LICENSE.md>
   * @author         Papiando <info@papiando.com>
@@ -16,10 +16,10 @@
 
 import fs from 'fs';
 import path from 'path';
-import url from 'url';
+import { fileURLToPath } from 'url';
 
-import Log from './module/Log.mjs';
-import FrameworkError from './module/FrameworkError.mjs';
+import FrameworkError from './FrameworkError.mjs';
+import Log from './Log.mjs';
 
 /** @module Namespace
   *
@@ -48,7 +48,7 @@ export default class Namespace {
     * @return {string}
     **/
   static get corePath() {
-    return path.dirname(url.fileURLToPath(import.meta.url));
+    return path.dirname(fileURLToPath(import.meta.url));
   }
   /** Static @function loaded()
     *
@@ -83,9 +83,10 @@ export default class Namespace {
         promises.push(Namespace.load(moduleName));
       }
       await Promise.allSettled(promises);
+      Log.success({ message: `Completed autoloading of modules` });
       return Namespace.loaded;
     } catch(error) {
-      throw new Exception({ message: `Failed to autoload modules`, type: 'error', error: error });
+      Log.error({ message: `Failed to autoload modules` });
     }
   }
   /** Static @function autoRegister(path,dependency)
@@ -108,8 +109,9 @@ export default class Namespace {
           Namespace.register({name: path.basename(file, path.extname(file)), path: './' + path.join(relPath, file), dependency: dependency});
         }
       }
+      Log.success(`Completed autoregistering of modules`);
     } catch(error) {
-      throw new Exception({ message: `Failed to autoregister modules`, type: 'error', error: error });
+      Log.error(`Failed to autoregister modules`);
     }
     return Namespace.registered;
   }
@@ -143,7 +145,7 @@ export default class Namespace {
   static async load(moduleName) {
     try {
       if(Namespace.isLoaded(moduleName)) {
-        throw new FrameworkError({ message: `Module \"${moduleName}\" was already loaded`, type: 'error' });
+        throw new FrameworkError({ message: `Module \"${moduleName}\" was already loaded`, type: 'warning' });
         return Namespace.namespace[moduleName];
       } else if(Namespace.isRegistered(moduleName)) {
         let module;
@@ -156,7 +158,7 @@ export default class Namespace {
         if(Namespace.default.publishGlobally) global[moduleName] = Namespace[moduleName];
         return Namespace[moduleName];
       } else {
-        throw new FrameworkError({ message: `Module \"${moduleName}\" is not registered`, type: 'warning' });
+        throw new FrameworkError({ message: `Module \"${moduleName}\" is not registered`, type: 'error' });
       }
     } catch(error) {
       new Log(error);
@@ -175,5 +177,3 @@ export default class Namespace {
     return Namespace.registry[moduleName] = registration;
   }
 }
-
-let reg = Namespace.autoRegister('module', Namespace.corePath);
