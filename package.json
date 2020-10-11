@@ -3,10 +3,10 @@
   "type": "module",
   "version": "0.0.4",
   "description": "Core classes and namespace to allow for modular extensibility",
-  "main": "./Namespace.cjs",
+  "main": "./index.mjs",
   "exports": {
-    "import": "./Namespace.mjs",
-    "require": "./Namespace.cjs"
+    "import": "./index.mjs",
+    "require": "./index.cjs"
   },
   "scripts": {
     "test": "node ./example/index.mjs"
