@@ -17,3 +17,19 @@ npm install
 The package will automatically register its own core classes.
 
 ### Usage
+Your own modules can easily be registered and loaded using the *Namespace* class. The example below shows how.
+Automatic registration works by scanning a folder and its subfolders for ES6 scripts. Each subfolder name refers to a class dependency, which is why these should be using the same name as the class it extends.
+This will result in the following code:
+``` index.mjs
+import '@cubo-cms/core';
+
+// Register modules under the *./module* folder
+Namespace.autoRegister();
+
+// Load all modules including dependencies
+Namespace.autoLoad();
+
+// Use the classes
+const new_customer = new Customer();
+```
+
