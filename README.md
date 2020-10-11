@@ -27,9 +27,22 @@ import '@cubo-cms/core';
 Namespace.autoRegister();
 
 // Load all modules including dependencies
-Namespace.autoLoad();
+await Namespace.autoLoad();
 
 // Use the classes
 const new_customer = new Customer();
 ```
+Note: Using a top-level await requires node.JS version 14.8 or newer.
 
+Remember using a module folder structure as shown in the example below:
+```
+/
+|
++-- module/
+    |
+    +-- Person.mjs
+    |
+    +-- Person/
+        |
+        +-- Customer.mjs
+```
