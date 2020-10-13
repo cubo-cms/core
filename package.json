@@ -1,8 +1,8 @@
 {
   "name": "@cubo-cms/core",
   "type": "module",
-  "version": "0.0.5",
-  "description": "Core classes and namespace to allow for modular extensibility",
+  "version": "0.0.6",
+  "description": "Cubo CMS Core Modules",
   "main": "./index.mjs",
   "exports": {
     "import": "./index.mjs",
