@@ -1,5 +1,5 @@
 /** @package        @cubo-cms/core
-  * @version        0.0.6
+  * @version        0.0.7
   * @copyright      2020 Cubo CMS <https://cubo-cms.com/COPYRIGHT.md>
   * @license        MIT license <https://cubo-cms.com/LICENSE.md>
   * @author         Papiando <info@papiando.com>

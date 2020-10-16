@@ -6,13 +6,9 @@
   * @description    Integrates packages by auto-registering all modules
   **/
 
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-import Namespace from './lib/Namespace.mjs';
-
-const basePath = dirname(fileURLToPath(import.meta.url));
-
-Namespace.autoRegister('./lib', basePath);
-
-export default Namespace;
+import('./lib/Namespace.mjs')
+  .then((ns) => {
+    ns.default.autoRegister('./lib', __dirname);
+    console.log(ns.default.registered);
+    module.exports = ns.default;
+  });
