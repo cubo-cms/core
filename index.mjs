@@ -13,6 +13,6 @@ import Namespace from './lib/Namespace.mjs';
 
 const basePath = dirname(fileURLToPath(import.meta.url));
 
-Namespace.autoRegister('./lib', basePath);
+await Namespace.autoRegister('./lib', basePath);
 
 export default Namespace;
