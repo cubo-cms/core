@@ -9,6 +9,8 @@
 
 import Namespace from '../index.mjs';
 
+Namespace.default.publishGlobally = true;
+
 console.log('');
 console.log('Registered modules:');
 console.log('');
@@ -22,6 +24,8 @@ console.log('Loaded modules:');
 console.log('');
 console.log(Namespace.loaded);
 console.log('');
+
+Log.default.colorize = true;
 
 Log.success('Invoking autoloaded module \"Log\"');
 
