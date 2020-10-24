@@ -1,5 +1,5 @@
 /** @package        @cubo-cms/core
-  * @version        0.1.11
+  * @version        0.2.13
   * @copyright      2020 Cubo CMS <https://cubo-cms.com/COPYRIGHT.md>
   * @license        MIT license <https://cubo-cms.com/LICENSE.md>
   * @author         Papiando <info@papiando.com>
@@ -13,6 +13,6 @@ import Namespace from './lib/Namespace.mjs';
 
 const basePath = dirname(fileURLToPath(import.meta.url));
 
-Namespace.autoRegister('./lib', basePath);
+await Namespace.autoRegister('./lib', basePath);
 
 export default Namespace;
